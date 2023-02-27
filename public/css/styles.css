@@ -1,10 +1,8 @@
 body {
-    margin: 0;
     font-family: 'Open Sans', sans-serif;
 }
 
 header > h1 {
-    margin: 0;
     padding: 1rem 1.5rem;
 }
 
@@ -98,7 +96,6 @@ input {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    margin: 0;
     padding: 0.5rem 1rem 0.25rem 1rem;
 }
 
@@ -107,7 +104,6 @@ input {
 }
 
 .editing-buttons > div > i {
-    margin: 0;
     padding: 0 0.5rem;
 }
 
@@ -119,7 +115,6 @@ input {
 
 .lane-head > * {
     font-weight: 500;
-    margin: 0;
     padding: 0.25rem 1rem 0.5rem;
 }
 
@@ -140,13 +135,11 @@ input {
 }
 
 .card-head > p {
-    margin: 0;
     padding: 0.25rem 1rem 0.25rem;
 }
 
 .card-body > p {
     font-size: 14px;
-    margin: 0;
     padding: 0.25rem 1rem 0.5rem 1.5rem;
 }
 
