@@ -23,6 +23,10 @@ app.set('view engine', 'pug')
 
 app.use('/', router)
 
+global.__basedir = __dirname
+
+console.log(__basedir)
+
 const DATA = {
     lanes: [
         {
@@ -52,10 +56,6 @@ app.get('/', (req, res) => {
     // - Get API running
     // - Figure out CORS so API actually works
     // - Get it to add a new lane.
-
-    // document
-    //     .getElementById('board')
-    //     .append(pug.render('mixins/lane', {laneData: newLaneData}))
 })
 
 app.use(express.static('public'))
