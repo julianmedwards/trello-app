@@ -1,10 +1,11 @@
-mixin board(DATA)
+mixin board(data)
   #board
-    if DATA.lanes
-      each lane in DATA.lanes
+    if data.lanes
+      each lane in data.lanes
         include lane
         +lane(lane)
 
     .add-new.round(name='add-btn')
       form.hidden(name='add-form', onsubmit='return false')
+        input(name='lane-name', placeholder='Name your lane.', type='text')
       i.fas.fa-plus(name='add-icon', aria-hidden='true')

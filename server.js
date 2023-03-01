@@ -25,37 +25,13 @@ app.use('/', router)
 
 global.__basedir = __dirname
 
-console.log(__basedir)
+app.get('/', async (req, res) => {
+    const response = await fetch('http://localhost:5000/lanes', {
+        method: 'GET',
+    })
+    const data = await response.json()
 
-const DATA = {
-    lanes: [
-        {
-            laneName: 'Lane 1',
-            cards: [{cardName: 'card 1', cardDescr: 'descr 1'}],
-        },
-        {
-            laneName: 'Lane 2',
-            cards: [{cardName: 'card 2', cardDescr: 'descr 2'}],
-        },
-    ],
-}
-
-app.get('/', (req, res) => {
-    res.render('index', {DATA: DATA})
-
-    // const newLaneData = {
-    //     laneName: 'Lane 1',
-    //     cards: [{cardName: 'card 1', cardDescr: 'descr 1'}],
-    // }
-
-    // Static page script files will listen for changes.
-    // Anytime a change happens, sends requests to api routes.
-    // API route functions can update database and return data/html
-    // to inject into the page from pug, etc.
-
-    // - Get API running
-    // - Figure out CORS so API actually works
-    // - Get it to add a new lane.
+    res.render('index', {data: JSON.parse(data)})
 })
 
 app.use(express.static('public'))
