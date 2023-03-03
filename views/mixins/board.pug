@@ -5,7 +5,7 @@ mixin board(data)
         include lane
         +lane(lane)
 
-    .add-new.round(name='add-btn')
+    #add-lane-btn.add-new.round(name='add-lane-btn')
       form.hidden(name='add-form', onsubmit='return false')
         input(name='lane-name', placeholder='Name your lane.', type='text')
       i.fas.fa-plus(name='add-icon', aria-hidden='true')

@@ -1,19 +1,11 @@
 mixin lane(laneData)
   .lane.round
     .editing-buttons
-      i.fas.fa-angle-left(
-        name='left',
-        data-type-click='moveLane',
-        aria-hidden='true'
-      )
+      i.fas.fa-angle-left(name='left', aria-hidden='true')
       div
-        i.fas.fa-edit(data-type-click='editLane', aria-hidden='true')
-        i.fas.fa-trash-alt(data-type-click='delLane', aria-hidden='true')
-      i.fas.fa-angle-right(
-        name='right',
-        data-type-click='moveLane',
-        aria-hidden='true'
-      )
+        i.fas.fa-edit(name='edit', aria-hidden='true')
+        i.fas.fa-trash-alt(name='delete', aria-hidden='true')
+      i.fas.fa-angle-right(name='right', aria-hidden='true')
     .lane-head
       //- LANE NAME VAR
       p= laneData.laneName
@@ -21,15 +13,8 @@ mixin lane(laneData)
       each card in laneData.cards
         include card
         +card(card)
-    .add-new.round(name='add-btn')
-      i.fas.fa-plus(
-        name='add-icon',
-        data-type-click='toggleAdding',
-        aria-hidden='true'
-      )
+    .add-new.round(name='add-card-btn')
+      i.fas.fa-plus(name='add-icon', aria-hidden='true')
       form.hidden(name='add-form', onsubmit='return false')
-        input(placeholder='Name your card.', data-type-keypress='')
-        input(
-          placeholder='Add a card description.',
-          data-type-keypress='addCard'
-        )
+        input(placeholder='Name your card.')
+        input(placeholder='Add a card description.')

@@ -2,29 +2,13 @@ mixin card(cardData)
   .card-container.round
     .card.round
       .editing-buttons
-        i.fas.fa-angle-left(
-          name='left',
-          data-type-click='moveCard',
-          aria-hidden='true'
-        )
-        i.fas.fa-angle-up(
-          name='up',
-          data-type-click='moveCard',
-          aria-hidden='true'
-        )
+        i.fas.fa-angle-left(name='left', aria-hidden='true')
+        i.fas.fa-angle-up(name='up', aria-hidden='true')
         div
-          i.fas.fa-edit(data-type-click='editCard', aria-hidden='true')
-          i.fas.fa-trash-alt(data-type-click='delCard', aria-hidden='true')
-        i.fas.fa-angle-down(
-          name='down',
-          data-type-click='moveCard',
-          aria-hidden='true'
-        )
-        i.fas.fa-angle-right(
-          name='right',
-          data-type-click='moveCard',
-          aria-hidden='true'
-        )
+          i.fas.fa-edit(name='edit', aria-hidden='true')
+          i.fas.fa-trash-alt(name='delete', aria-hidden='true')
+        i.fas.fa-angle-down(name='down', aria-hidden='true')
+        i.fas.fa-angle-right(name='right', aria-hidden='true')
       .card-head
         //- CARD NAME VAR
         p= cardData.cardName
