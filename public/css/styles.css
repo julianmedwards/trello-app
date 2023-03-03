@@ -91,11 +91,6 @@ input {
     padding: 0.5rem;
 }
 
-.lane .add-new:hover {
-    background-color: #294c6067;
-    cursor: pointer;
-}
-
 /* Lane buttons */
 .editing-buttons {
     display: flex;
