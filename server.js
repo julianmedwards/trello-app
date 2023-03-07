@@ -1,13 +1,11 @@
 'use strict'
 
 const express = require('express')
-var cookieParser = require('cookie-parser')
 
 const app = express()
 const port = process.env.PORT || 3000
 
 app.use(express.json())
-app.use(cookieParser())
 
 app.set('views', './views')
 app.set('view engine', 'pug')
