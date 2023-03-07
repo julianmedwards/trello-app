@@ -1,5 +1,5 @@
 mixin card(cardData)
-  .card-container.round
+  .card-container.round(data-db-id=cardData._id)
     .card.round
       .editing-buttons
         i.fas.fa-angle-left(name='left', aria-hidden='true')

@@ -184,7 +184,14 @@ async function addLane(input) {
     if (laneName !== '') {
         input.parentElement.reset()
 
-        const response = await postLane({laneName: laneName, cards: []})
+        const response = await postLane({
+            boardId: document
+                .getElementById('board')
+                .getAttribute('data-db-id'),
+            laneData: {
+                laneName: laneName,
+            },
+        })
 
         if (response.ok) {
             const newLane = buildLane(laneName)
@@ -192,6 +199,8 @@ async function addLane(input) {
 
             input.parentElement.reset()
             toggleAdding(input.parentElement.nextElementSibling)
+        } else {
+            console.error('Issue adding lane to board.')
         }
     } else {
         alert('Please add a name to create a new lane.')
