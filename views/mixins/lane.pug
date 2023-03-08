@@ -9,10 +9,11 @@ mixin lane(laneData)
     .lane-head
       //- LANE NAME VAR
       p= laneData.laneName
-    if laneData.cards.length > 0
-      each card in laneData.cards
-        include card
-        +card(card)
+    .card-container.round
+      if laneData.cards.length > 0
+        each card in laneData.cards
+          include card
+          +card(card)
     .add-new.round(name='add-card-btn')
       i.fas.fa-plus(name='add-icon', aria-hidden='true')
       form.hidden(name='add-form', onsubmit='return false')

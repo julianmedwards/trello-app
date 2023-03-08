@@ -16,13 +16,17 @@ async function postLane(data) {
     const response = await fetch('http://localhost:5000/lanes', {
         method: 'POST',
         headers: {
-            // 'Access-Control-Allow-Headers':
-            //     'Origin, X-Requested-With, Content-Type, Accept',
-            // Accept: 'application/json',
-            // 'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'text/plain',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
+    })
+
+    return response
+}
+
+async function deleteLane(data) {
+    const response = await fetch(`http://localhost:5000/lanes/${data.laneId}`, {
+        method: 'DELETE',
     })
 
     return response

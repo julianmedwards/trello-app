@@ -55,7 +55,7 @@ function buildLane(laneName) {
     addCardBtn.append(addCardIcon, addCardForm)
     newLane.append(addCardBtn)
 
-    activateButton(addCardIcon, toggleAdding)
+    activateButton(addCardIcon, toggleAddingCard)
 
     return newLane
 }
