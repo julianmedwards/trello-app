@@ -24,6 +24,18 @@ async function postLane(data) {
     return response
 }
 
+async function updateLane(data) {
+    const response = await fetch(`http://localhost:5000/lanes/${data.laneId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data.laneData),
+    })
+
+    return response
+}
+
 async function deleteLane(data) {
     const response = await fetch(`http://localhost:5000/lanes/${data.laneId}`, {
         method: 'DELETE',

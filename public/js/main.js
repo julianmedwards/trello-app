@@ -67,13 +67,6 @@ function applyNewCardText(inputs, cardDivs) {
     inputs[0].parentElement.remove()
 }
 
-function applyNewLaneText(input, laneHead) {
-    laneHead.querySelector('p').textContent = input.value
-    laneHead.querySelector('p').style.display = ''
-    input.remove()
-    laneHead.classList.remove('editing')
-}
-
 function toggleVisiblity(element) {
     if (
         element.classList.contains('hidden') ||

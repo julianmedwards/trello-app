@@ -17,7 +17,7 @@ function addLaneButtonListeners(event) {
                 // Break here acts as toggle.
                 break
             }
-            editLane(event.target)
+            startEditingLane(event.target)
             break
         case 'delete':
             if (isEditing(lane.querySelector('.lane-head'))) {
@@ -56,8 +56,11 @@ async function addLane(input) {
             },
         })
 
+        let resData = await response.json()
+
         if (response.ok) {
             const newLane = buildLane(laneName)
+            newLane.setAttribute('data-db-id', resData.laneId)
             input.parentElement.parentElement.before(newLane)
 
             input.parentElement.reset()
@@ -87,7 +90,7 @@ function moveLane(btn) {
     }
 }
 
-function editLane(btn) {
+function startEditingLane(btn) {
     let lane = btn.parentElement.parentElement.parentElement
 
     let headDiv = lane.querySelector('.lane-head')
@@ -102,10 +105,45 @@ function editLane(btn) {
     input.value = name
 
     activateInput(input, () => {
-        applyNewLaneText(input, headDiv)
+        applyLaneEdit(input, headDiv)
     })
     headDiv.append(input)
     input.focus()
+}
+
+async function applyLaneEdit(input, laneHead) {
+    let newLaneName = input.value
+    if (newLaneName === laneHead.querySelector('p').textContent) {
+        laneHead.querySelector('p').style.display = ''
+        input.remove()
+        laneHead.classList.remove('editing')
+    } else {
+        const response = await updateLane({
+            laneId: laneHead.parentElement.getAttribute('data-db-id'),
+            laneData: {laneName: newLaneName},
+        })
+
+        if (response.ok) {
+            laneHead.querySelector('p').textContent = newLaneName
+            laneHead.querySelector('p').style.display = ''
+            input.remove()
+            laneHead.classList.remove('editing')
+        }
+    }
+}
+
+function cancelLaneEdit(wrapper) {
+    wrapper.classList.remove('editing')
+
+    let inputs = wrapper.querySelectorAll('input')
+    for (let input of inputs) {
+        input.remove()
+    }
+
+    let originalTexts = wrapper.querySelectorAll('p')
+    for (let text of originalTexts) {
+        text.style.display = ''
+    }
 }
 
 async function delLane(btn) {
@@ -164,18 +202,4 @@ async function delLane(btn) {
             }
         }
     } else console.log('Lane delete aborted.')
-}
-
-function cancelLaneEdit(wrapper) {
-    wrapper.classList.remove('editing')
-
-    let inputs = wrapper.querySelectorAll('input')
-    for (let input of inputs) {
-        input.remove()
-    }
-
-    let originalTexts = wrapper.querySelectorAll('p')
-    for (let text of originalTexts) {
-        text.style.display = ''
-    }
 }
