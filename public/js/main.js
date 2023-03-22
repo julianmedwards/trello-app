@@ -95,4 +95,8 @@ function isEditing(element) {
 
 window.onload = () => {
     initBtns()
+    let currentBoardId = document
+        .getElementById('board')
+        .getAttribute('data-db-id')
+    document.cookie = `lastBoard=${currentBoardId}`
 }

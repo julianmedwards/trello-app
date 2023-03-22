@@ -12,34 +12,43 @@
 //     return response
 // }
 
-async function postLane(data) {
-    const response = await fetch('http://localhost:5000/lanes', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
+async function postLane(boardId, laneData) {
+    const response = await fetch(
+        `http://localhost:5000/boards/${boardId}/lanes`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(laneData),
+        }
+    )
 
     return response
 }
 
-async function updateLane(data) {
-    const response = await fetch(`http://localhost:5000/lanes/${data.laneId}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data.laneData),
-    })
+async function updateLane(boardId, laneData) {
+    const response = await fetch(
+        `http://localhost:5000/boards/${boardId}/lanes/${laneData.laneId}`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(laneData),
+        }
+    )
 
     return response
 }
 
-async function deleteLane(data) {
-    const response = await fetch(`http://localhost:5000/lanes/${data.laneId}`, {
-        method: 'DELETE',
-    })
+async function deleteLane(boardId, laneId) {
+    const response = await fetch(
+        `http://localhost:5000/boards/${boardId}/lanes/${laneId}`,
+        {
+            method: 'DELETE',
+        }
+    )
 
     return response
 }

@@ -18,13 +18,10 @@ html(lang='en')
   title Trello Board w/ Express & REST
 body
   header
-    if (data.length > 0)
-      h1= data[0].boardName
-    else
-      h1 No Boards
+    h1= data.boardName
   main
     include mixins/board
-    +board(data[0])
+    +board(data)
   script(src='./js/requests.js')
   script(src='./js/lane.js')
   script(src='./js/card.js')

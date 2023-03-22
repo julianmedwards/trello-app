@@ -47,14 +47,12 @@ async function addLane(input) {
     if (laneName !== '') {
         input.parentElement.reset()
 
-        const response = await postLane({
-            boardId: document
-                .getElementById('board')
-                .getAttribute('data-db-id'),
-            laneData: {
+        const response = await postLane(
+            document.getElementById('board').getAttribute('data-db-id'),
+            {
                 laneName: laneName,
-            },
-        })
+            }
+        )
 
         let resData = await response.json()
 
@@ -118,10 +116,10 @@ async function applyLaneEdit(input, laneHead) {
         input.remove()
         laneHead.classList.remove('editing')
     } else {
-        const response = await updateLane({
-            laneId: laneHead.parentElement.getAttribute('data-db-id'),
-            laneData: {laneName: newLaneName},
-        })
+        const response = await updateLane(
+            laneHead.parentElement.getAttribute('data-db-id'),
+            {laneName: newLaneName}
+        )
 
         if (response.ok) {
             laneHead.querySelector('p').textContent = newLaneName
@@ -180,9 +178,10 @@ async function delLane(btn) {
                     )
                 }
             } else {
-                const response = await deleteLane({
-                    laneId: currLane.getAttribute('data-db-id'),
-                })
+                const response = await deleteLane(
+                    document.getElementById('board').getAttribute('data-db-id'),
+                    currLane.getAttribute('data-db-id')
+                )
                 if (response.status === 204) {
                     currLane.remove()
                 } else {
@@ -191,9 +190,10 @@ async function delLane(btn) {
                 }
             }
         } else {
-            const response = await deleteLane({
-                laneId: currLane.getAttribute('data-db-id'),
-            })
+            const response = await deleteLane(
+                document.getElementById('board').getAttribute('data-db-id'),
+                currLane.getAttribute('data-db-id')
+            )
             if (response.status === 204) {
                 currLane.remove()
             } else {
