@@ -71,20 +71,43 @@ async function addLane(input) {
     }
 }
 
-function moveLane(btn) {
+async function moveLane(btn) {
     let lane = btn.parentElement.parentElement
+    let sequenceShift
     if (btn.getAttribute('name') === 'left') {
         let prev = lane.previousElementSibling
         if (prev) {
-            lane.previousElementSibling.before(lane)
+            sequenceShift = -1
+            const response = await updateLane(
+                document.getElementById('board').getAttribute('data-db-id'),
+                {laneId: lane.getAttribute('data-db-id'), sequenceShift}
+            )
+
+            if (response.ok) {
+                lane.previousElementSibling.before(lane)
+            } else {
+                console.error('Serverside issue moving lane.')
+            }
         } else {
             console.log('Lane is already at beginning of list.')
         }
     } else {
         let next = lane.nextElementSibling
         if (!next.getAttribute('name', 'add-btn')) {
-            next.after(lane)
-        } else console.log('Lane has reached end of list.')
+            sequenceShift = 1
+            const response = await updateLane(
+                document.getElementById('board').getAttribute('data-db-id'),
+                {laneId: lane.getAttribute('data-db-id'), sequenceShift}
+            )
+
+            if (response.ok) {
+                next.after(lane)
+            } else {
+                console.error('Serverside issue moving lane.')
+            }
+        } else {
+            console.log('Lane has reached end of list.')
+        }
     }
 }
 
@@ -117,8 +140,11 @@ async function applyLaneEdit(input, laneHead) {
         laneHead.classList.remove('editing')
     } else {
         const response = await updateLane(
-            laneHead.parentElement.getAttribute('data-db-id'),
-            {laneName: newLaneName}
+            laneHead.parentElement.parentElement.getAttribute('data-db-id'),
+            {
+                laneId: laneHead.parentElement.getAttribute('data-db-id'),
+                laneName: newLaneName,
+            }
         )
 
         if (response.ok) {
@@ -126,6 +152,8 @@ async function applyLaneEdit(input, laneHead) {
             laneHead.querySelector('p').style.display = ''
             input.remove()
             laneHead.classList.remove('editing')
+        } else {
+            console.error('Serverside issue updating lane name.')
         }
     }
 }
