@@ -12,6 +12,18 @@
 //     return response
 // }
 
+async function patchBoardReq(boardId, boardData) {
+    const response = await fetch(`http://localhost:5000/boards/${boardId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(boardData),
+    })
+
+    return response
+}
+
 async function postLaneReq(boardId, laneData) {
     const response = await fetch(
         `http://localhost:5000/boards/${boardId}/lanes`,

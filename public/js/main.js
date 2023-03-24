@@ -6,6 +6,8 @@ const icons = {
 }
 
 function initBtns() {
+    addBoardEventListeners()
+
     let addLaneBtn = document.getElementById('add-lane-btn')
     addLaneBtn.querySelector('i').addEventListener('click', function () {
         toggleAddingLane(addLaneBtn.querySelector('i'))
