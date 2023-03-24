@@ -12,7 +12,7 @@
 //     return response
 // }
 
-async function postLane(boardId, laneData) {
+async function postLaneReq(boardId, laneData) {
     const response = await fetch(
         `http://localhost:5000/boards/${boardId}/lanes`,
         {
@@ -27,7 +27,7 @@ async function postLane(boardId, laneData) {
     return response
 }
 
-async function updateLane(boardId, laneData) {
+async function patchLaneReq(boardId, laneData) {
     const response = await fetch(
         `http://localhost:5000/boards/${boardId}/lanes/${laneData.laneId}`,
         {
@@ -42,7 +42,7 @@ async function updateLane(boardId, laneData) {
     return response
 }
 
-async function deleteLane(boardId, laneId) {
+async function deleteLaneReq(boardId, laneId) {
     const response = await fetch(
         `http://localhost:5000/boards/${boardId}/lanes/${laneId}`,
         {
@@ -53,7 +53,7 @@ async function deleteLane(boardId, laneId) {
     return response
 }
 
-async function postCard(boardId, laneId, cardData) {
+async function postCardReq(boardId, laneId, cardData) {
     const response = await fetch(
         `http://localhost:5000/boards/${boardId}/lanes/${laneId}/cards`,
         {
@@ -68,7 +68,7 @@ async function postCard(boardId, laneId, cardData) {
     return response
 }
 
-async function updateCard(boardId, laneId, cardData) {
+async function patchCardReq(boardId, laneId, cardData) {
     const response = await fetch(
         `http://localhost:5000/boards/${boardId}/lanes/${laneId}/cards/${cardData.cardId}`,
         {
@@ -83,7 +83,7 @@ async function updateCard(boardId, laneId, cardData) {
     return response
 }
 
-async function deleteCard(boardId, laneId, cardId) {
+async function deleteCardReq(boardId, laneId, cardId) {
     const response = await fetch(
         `http://localhost:5000/boards/${boardId}/lanes/${laneId}/cards/${cardId}`,
         {

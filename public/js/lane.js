@@ -24,18 +24,20 @@ function addLaneButtonListeners(event) {
                 // Should add prompt to save/reset.
                 cancelLaneEdit(lane.querySelector('.lane-head'))
             }
-            delLane(event.target)
+            removeLane(event.target)
             break
     }
 }
 
 function toggleAddingLane(button) {
-    toggleVisiblity(button.previousElementSibling)
     toggleIcon(button, icons.plus, icons.times)
-    activateInput(button.previousElementSibling.firstElementChild, addLane)
-    if (button.previousElementSibling.classList.contains('visible')) {
+
+    let form = button.previousElementSibling
+    toggleVisiblity(form)
+    activateInput(form.querySelector('input'), addLane)
+    if (form.classList.contains('visible')) {
         setTimeout(function () {
-            button.previousElementSibling.firstElementChild.focus()
+            form.firstElementChild.focus()
         }, 100)
     } else {
         document.activeElement.blur()
@@ -43,11 +45,12 @@ function toggleAddingLane(button) {
 }
 
 async function addLane(input) {
+    const addDiv = input.closest('.add-new')
     const laneName = input.value
     if (laneName !== '') {
-        input.parentElement.reset()
+        addDiv.querySelector('form').reset()
 
-        const response = await postLane(
+        const response = await postLaneReq(
             document.getElementById('board').getAttribute('data-db-id'),
             {
                 laneName: laneName,
@@ -59,10 +62,9 @@ async function addLane(input) {
         if (response.ok) {
             const newLane = buildLane(laneName)
             newLane.setAttribute('data-db-id', resData.laneId)
-            input.parentElement.parentElement.before(newLane)
+            addDiv.before(newLane)
 
-            input.parentElement.reset()
-            toggleAddingLane(input.parentElement.nextElementSibling)
+            toggleAddingLane(addDiv.querySelector('i'))
         } else {
             console.error('Serverside issue adding lane to board.')
         }
@@ -72,19 +74,19 @@ async function addLane(input) {
 }
 
 async function moveLane(btn) {
-    let lane = btn.parentElement.parentElement
+    let lane = btn.closest('.lane')
     let sequenceShift
     if (btn.getAttribute('name') === 'left') {
         let prev = lane.previousElementSibling
         if (prev) {
             sequenceShift = -1
-            const response = await updateLane(
+            const response = await patchLaneReq(
                 document.getElementById('board').getAttribute('data-db-id'),
                 {laneId: lane.getAttribute('data-db-id'), sequenceShift}
             )
 
             if (response.ok) {
-                lane.previousElementSibling.before(lane)
+                prev.before(lane)
             } else {
                 console.error('Serverside issue moving lane.')
             }
@@ -95,7 +97,7 @@ async function moveLane(btn) {
         let next = lane.nextElementSibling
         if (!next.getAttribute('name', 'add-btn')) {
             sequenceShift = 1
-            const response = await updateLane(
+            const response = await patchLaneReq(
                 document.getElementById('board').getAttribute('data-db-id'),
                 {laneId: lane.getAttribute('data-db-id'), sequenceShift}
             )
@@ -112,7 +114,7 @@ async function moveLane(btn) {
 }
 
 function startEditingLane(btn) {
-    let lane = btn.parentElement.parentElement.parentElement
+    let lane = btn.closest('.lane')
 
     let headDiv = lane.querySelector('.lane-head')
     headDiv.classList.add('editing')
@@ -139,10 +141,10 @@ async function applyLaneEdit(input, laneHead) {
         input.remove()
         laneHead.classList.remove('editing')
     } else {
-        const response = await updateLane(
-            laneHead.parentElement.parentElement.getAttribute('data-db-id'),
+        const response = await patchLaneReq(
+            document.getElementById('board').getAttribute('data-db-id'),
             {
-                laneId: laneHead.parentElement.getAttribute('data-db-id'),
+                laneId: laneHead.closest('.lane').getAttribute('data-db-id'),
                 laneName: newLaneName,
             }
         )
@@ -172,10 +174,10 @@ function cancelLaneEdit(wrapper) {
     }
 }
 
-async function delLane(btn) {
+async function removeLane(btn) {
     let msg = 'Are you sure you want to delete this swim lane?'
     if (confirm(msg)) {
-        let currLane = btn.parentElement.parentElement.parentElement
+        let currLane = btn.closest('.lane')
         let cards = currLane.querySelector('.card-container').children
         let lanes = document.getElementById('board').querySelectorAll('.lane')
         if (cards.length > 0 && lanes.length > 1) {
@@ -206,7 +208,7 @@ async function delLane(btn) {
                     )
                 }
             } else {
-                const response = await deleteLane(
+                const response = await deleteLaneReq(
                     document.getElementById('board').getAttribute('data-db-id'),
                     currLane.getAttribute('data-db-id')
                 )
@@ -218,7 +220,7 @@ async function delLane(btn) {
                 }
             }
         } else {
-            const response = await deleteLane(
+            const response = await deleteLaneReq(
                 document.getElementById('board').getAttribute('data-db-id'),
                 currLane.getAttribute('data-db-id')
             )

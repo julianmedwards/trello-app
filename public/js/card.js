@@ -18,13 +18,13 @@ function addCardButtonListeners(event) {
                 // Break here acts as toggle.
                 break
             }
-            editCard(event.target)
+            startEditingCard(event.target)
             break
         case 'delete':
             if (isEditing(card.querySelector('.card-head'))) {
                 cancelCardEdit(card)
             }
-            delCard(event.target)
+            removeCard(event.target)
             break
     }
 }
@@ -53,7 +53,7 @@ async function addCard(descrInput) {
     let cardName = descrInput.previousElementSibling.value
     let cardDescr = descrInput.value
     if (cardName != '') {
-        const response = await postCard(
+        const response = await postCardReq(
             document.getElementById('board').getAttribute('data-db-id'),
             lane.getAttribute('data-db-id'),
             {
@@ -80,7 +80,7 @@ async function addCard(descrInput) {
 }
 
 function moveCard(btn) {
-    let card = btn.parentElement.parentElement
+    let card = btn.closest('.card')
     switch (btn.getAttribute('name')) {
         case 'up':
             let prevCard = card.previousElementSibling
@@ -99,8 +99,7 @@ function moveCard(btn) {
             }
             break
         case 'left':
-            let prevLane =
-                card.parentElement.parentElement.previousElementSibling
+            let prevLane = card.closest('.lane').previousElementSibling
             if (prevLane && prevLane.classList.contains('lane')) {
                 let prevLaneCards = prevLane.querySelector('.card-container')
                 prevLaneCards.append(card)
@@ -109,7 +108,7 @@ function moveCard(btn) {
             }
             break
         case 'right':
-            let nextLane = card.parentElement.parentElement.nextElementSibling
+            let nextLane = card.closest('.lane').nextElementSibling
             if (nextLane && nextLane.classList.contains('lane')) {
                 let nextLaneCards = nextLane.querySelector('.card-container')
                 nextLaneCards.append(card)
@@ -120,19 +119,20 @@ function moveCard(btn) {
     }
 }
 
-function editCard(btn) {
-    let headDiv = btn.parentElement.parentElement.nextElementSibling
-    let bodyDiv = headDiv.nextElementSibling
+function startEditingCard(btn) {
+    let card = btn.closest('.card')
+    let headDiv = card.querySelector('.card-head')
+    let bodyDiv = card.querySelector('.card-body')
     headDiv.style.display = 'none'
     bodyDiv.style.display = 'none'
     headDiv.classList.add('editing')
     bodyDiv.classList.add('editing')
 
-    let headEl = headDiv.firstElementChild
-    let bodyEl = bodyDiv.firstElementChild
+    let headText = headDiv.querySelector('p')
+    let bodyText = bodyDiv.querySelector('p')
 
-    let name = headEl.textContent
-    let descr = bodyEl.textContent
+    let name = headText.textContent
+    let descr = bodyText.textContent
 
     let editForm = document.createElement('form')
     editForm.setAttribute('onsubmit', 'return false')
@@ -155,12 +155,24 @@ function editCard(btn) {
     nameInput.focus()
 }
 
-async function delCard(btn) {
+function cancelCardEdit(wrapper) {
+    let head = wrapper.querySelector('.card-head')
+    let body = wrapper.querySelector('.card-body')
+    head.classList.remove('editing')
+    body.classList.remove('editing')
+
+    wrapper.querySelector('form').remove()
+
+    head.style.display = ''
+    body.style.display = ''
+}
+
+async function removeCard(btn) {
     let card = btn.closest('.card')
     let lane = btn.closest('.lane')
     let msg = 'Are you sure you want to delete this card?'
     if (confirm(msg)) {
-        const response = await deleteCard(
+        const response = await deleteCardReq(
             document.getElementById('board').getAttribute('data-db-id'),
             lane.getAttribute('data-db-id'),
             card.getAttribute('data-db-id')
@@ -173,16 +185,4 @@ async function delCard(btn) {
             alert('Failed to delete card!')
         }
     } else console.log('Card delete aborted.')
-}
-
-function cancelCardEdit(wrapper) {
-    let head = wrapper.querySelector('.card-head')
-    let body = wrapper.querySelector('.card-body')
-    head.classList.remove('editing')
-    body.classList.remove('editing')
-
-    wrapper.querySelector('form').remove()
-
-    head.style.display = ''
-    body.style.display = ''
 }
