@@ -58,7 +58,7 @@ function advanceCursor(currInput, form) {
 // which isn't allowed on creation. Need to add logic to check if
 // there's still a value to head els when creating logic to post
 // to server.
-function applyNewCardText(inputs, cardDivs) {
+function applyCardEdit(inputs, cardDivs) {
     for (let i = 0; i < inputs.length; i++) {
         cardDivs[i].querySelector('p').textContent = inputs[i].value
         cardDivs[i].style.display = ''

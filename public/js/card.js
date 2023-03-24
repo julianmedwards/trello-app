@@ -1,7 +1,7 @@
 'use strict'
 
 function addCardButtonListeners(event) {
-    let card = event.currentTarget.parentElement
+    let card = event.currentTarget.closest('.card')
     switch (event.target.getAttribute('name')) {
         case 'left':
         case 'right':
@@ -48,18 +48,32 @@ function toggleAddingCard(button) {
     }
 }
 
-function addCard(descrInput) {
+async function addCard(descrInput) {
+    let lane = descrInput.closest('.lane')
     let cardName = descrInput.previousElementSibling.value
+    let cardDescr = descrInput.value
     if (cardName != '') {
-        let cardDescr = descrInput.value
-        let cardContainer =
-            descrInput.parentElement.parentElement.previousElementSibling
+        const response = await postCard(
+            document.getElementById('board').getAttribute('data-db-id'),
+            lane.getAttribute('data-db-id'),
+            {
+                cardName: cardName,
+                cardDescr: cardDescr,
+            }
+        )
 
-        const newCard = buildCard(cardName, cardDescr)
-        cardContainer.append(newCard)
+        let resData = await response.json()
 
-        descrInput.parentElement.reset()
-        toggleAddingCard(descrInput.parentElement.previousElementSibling)
+        if (response.ok) {
+            let cardContainer = lane.querySelector('.card-container')
+
+            const newCard = buildCard(cardName, cardDescr)
+            newCard.setAttribute('data-db-id', resData.cardId)
+            cardContainer.append(newCard)
+
+            descrInput.parentElement.reset()
+            toggleAddingCard(lane.querySelector('.add-new > i'))
+        }
     } else {
         alert('Please add a name to create a card.')
     }
@@ -135,16 +149,29 @@ function editCard(btn) {
         advanceCursor(nameInput, nameInput.parentElement)
     })
     activateInput(descrInput, () => {
-        applyNewCardText([nameInput, descrInput], [headDiv, bodyDiv])
+        applyCardEdit([nameInput, descrInput], [headDiv, bodyDiv])
     })
     headDiv.before(editForm)
     nameInput.focus()
 }
 
-function delCard(btn) {
+async function delCard(btn) {
+    let card = btn.closest('.card')
+    let lane = btn.closest('.lane')
     let msg = 'Are you sure you want to delete this card?'
     if (confirm(msg)) {
-        btn.parentElement.parentElement.parentElement.remove()
+        const response = await deleteCard(
+            document.getElementById('board').getAttribute('data-db-id'),
+            lane.getAttribute('data-db-id'),
+            card.getAttribute('data-db-id')
+        )
+
+        if (response.status === 204) {
+            card.remove()
+        } else {
+            console.error('Serverside issue deleting card.')
+            alert('Failed to delete card!')
+        }
     } else console.log('Card delete aborted.')
 }
 
