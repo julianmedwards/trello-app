@@ -34,7 +34,9 @@ function toggleAddingLane(button) {
 
     let form = button.previousElementSibling
     toggleVisiblity(form)
-    activateInput(form.querySelector('input'), addLane)
+    activateInput(form.querySelector('input'), addLane, () => {
+        toggleAddingLane(button)
+    })
     if (form.classList.contains('visible')) {
         setTimeout(function () {
             form.firstElementChild.focus()
@@ -127,9 +129,15 @@ function startEditingLane(btn) {
     input.type = 'text'
     input.value = name
 
-    activateInput(input, () => {
-        applyLaneEdit(input, headDiv)
-    })
+    activateInput(
+        input,
+        () => {
+            applyLaneEdit(input, headDiv)
+        },
+        () => {
+            cancelLaneEdit(headDiv)
+        }
+    )
     headDiv.append(input)
     input.focus()
 }

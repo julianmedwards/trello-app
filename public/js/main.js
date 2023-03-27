@@ -37,13 +37,15 @@ function activateButton(element, funct) {
         })
     }
 }
-function activateInput(element, funct) {
+function activateInput(element, confirmFunct, cancelFunct) {
     if (!element.getAttribute('data-type-keypress')) {
-        element.setAttribute('data-type-keypress', funct.name)
-        element.addEventListener('keypress', function (e) {
+        element.setAttribute('data-type-keypress', 'active')
+        element.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
-                console.log('Enter pressed')
-                funct(element)
+                confirmFunct(element)
+            } else if (e.key === 'Escape') {
+                console.log('Escape pressed')
+                cancelFunct()
             }
         })
     }

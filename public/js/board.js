@@ -21,9 +21,13 @@ function startEditingBoardName(headerText) {
 
     editForm.append(input)
 
-    activateInput(input, () => {
-        applyBoardEdit(input, header)
-    })
+    activateInput(
+        input,
+        () => {
+            applyBoardEdit(input, header)
+        },
+        cancelBoardNameEdit
+    )
     headerText.before(editForm)
     input.focus()
 }
@@ -32,7 +36,7 @@ async function applyBoardEdit(input, header) {
     let newTitle = input.value
     if (newTitle === header.querySelector('h1').textContent) {
         header.querySelector('h1').style.display = ''
-        input.remove()
+        header.querySelector('form').remove()
         header.classList.remove('editing')
     } else {
         const response = await patchBoardReq(
@@ -45,7 +49,7 @@ async function applyBoardEdit(input, header) {
         if (response.ok) {
             header.querySelector('h1').textContent = newTitle
             header.querySelector('h1').style.display = ''
-            input.remove()
+            header.querySelector('form').remove()
             header.classList.remove('editing')
         } else {
             console.error('Serverside issue updating lane name.')
@@ -53,10 +57,10 @@ async function applyBoardEdit(input, header) {
     }
 }
 
-function cancelBoardNameEdit(header) {
+function cancelBoardNameEdit() {
+    const header = document.querySelector('header')
+
     header.classList.remove('editing')
-
     header.querySelector('form').remove()
-
     header.querySelector('h1').style.display = ''
 }

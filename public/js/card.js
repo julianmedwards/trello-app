@@ -34,10 +34,18 @@ function toggleAddingCard(button) {
 
     let form = button.nextElementSibling
     toggleVisiblity(form)
-    activateInput(form.firstElementChild, () => {
-        advanceCursor(form.firstElementChild, form)
+    activateInput(
+        form.firstElementChild,
+        () => {
+            advanceCursor(form.firstElementChild, form)
+        },
+        () => {
+            toggleAddingCard(button)
+        }
+    )
+    activateInput(form.lastElementChild, addCard, () => {
+        toggleAddingCard(button)
     })
-    activateInput(form.lastElementChild, addCard)
 
     if (form.classList.contains('visible')) {
         setTimeout(function () {
@@ -191,12 +199,24 @@ function startEditingCard(btn) {
 
     editForm.append(nameInput, descrInput)
 
-    activateInput(nameInput, () => {
-        advanceCursor(nameInput, nameInput.parentElement)
-    })
-    activateInput(descrInput, () => {
-        applyCardEdit([nameInput, descrInput], [headDiv, bodyDiv])
-    })
+    activateInput(
+        nameInput,
+        () => {
+            advanceCursor(nameInput, nameInput.parentElement)
+        },
+        () => {
+            cancelCardEdit(card)
+        }
+    )
+    activateInput(
+        descrInput,
+        () => {
+            applyCardEdit([nameInput, descrInput], [headDiv, bodyDiv])
+        },
+        () => {
+            cancelCardEdit(card)
+        }
+    )
     headDiv.before(editForm)
     nameInput.focus()
 }
