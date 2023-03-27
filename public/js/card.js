@@ -52,7 +52,7 @@ async function addCard(descrInput) {
     let lane = descrInput.closest('.lane')
     let cardName = descrInput.previousElementSibling.value
     let cardDescr = descrInput.value
-    if (cardName != '') {
+    if (cardName.trim() !== '') {
         const response = await postCardReq(
             document.getElementById('board').getAttribute('data-db-id'),
             lane.getAttribute('data-db-id'),
@@ -75,7 +75,7 @@ async function addCard(descrInput) {
             toggleAddingCard(lane.querySelector('.add-new > i'))
         }
     } else {
-        alert('Please add a name to create a card.')
+        alert('Please add a title to create a card.')
     }
 }
 
@@ -206,35 +206,43 @@ function startEditingCard(btn) {
 // there's still a value to head els when creating logic to post
 // to server.
 async function applyCardEdit(inputs, cardDivs) {
-    let changed = false
-    for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].value !== cardDivs[i].querySelector('p').textContent) {
-            changed = true
-            break
+    if (inputs[0].value.trim() !== '') {
+        let changed = false
+        for (let i = 0; i < inputs.length; i++) {
+            if (
+                inputs[i].value !== cardDivs[i].querySelector('p').textContent
+            ) {
+                changed = true
+                break
+            }
         }
-    }
 
-    if (changed) {
-        const response = await patchCardReq(
-            document.getElementById('board').getAttribute('data-db-id'),
-            cardDivs[0].closest('.lane').getAttribute('data-db-id'),
-            {
-                cardId: cardDivs[0].closest('.card').getAttribute('data-db-id'),
-                cardName: inputs[0].value,
-                cardDescr: inputs[1].value,
-            }
-        )
+        if (changed) {
+            const response = await patchCardReq(
+                document.getElementById('board').getAttribute('data-db-id'),
+                cardDivs[0].closest('.lane').getAttribute('data-db-id'),
+                {
+                    cardId: cardDivs[0]
+                        .closest('.card')
+                        .getAttribute('data-db-id'),
+                    cardName: inputs[0].value,
+                    cardDescr: inputs[1].value,
+                }
+            )
 
-        if (response.ok) {
-            for (let i = 0; i < inputs.length; i++) {
-                cardDivs[i].querySelector('p').textContent = inputs[i].value
-                cardDivs[i].style.display = ''
-                cardDivs[i].classList.remove('editing')
+            if (response.ok) {
+                for (let i = 0; i < inputs.length; i++) {
+                    cardDivs[i].querySelector('p').textContent = inputs[i].value
+                    cardDivs[i].style.display = ''
+                    cardDivs[i].classList.remove('editing')
+                }
+                inputs[0].parentElement.remove()
             }
-            inputs[0].parentElement.remove()
+        } else {
+            cancelCardEdit(cardDivs[0].closest('.card'))
         }
     } else {
-        cancelCardEdit(cardDivs[0].closest('.card'))
+        alert('Please include a title for the card.')
     }
 }
 

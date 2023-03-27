@@ -47,7 +47,7 @@ function toggleAddingLane(button) {
 async function addLane(input) {
     const addDiv = input.closest('.add-new')
     const laneName = input.value
-    if (laneName !== '') {
+    if (laneName.trim() !== '') {
         addDiv.querySelector('form').reset()
 
         const response = await postLaneReq(
@@ -136,27 +136,33 @@ function startEditingLane(btn) {
 
 async function applyLaneEdit(input, laneHead) {
     let newLaneName = input.value
-    if (newLaneName === laneHead.querySelector('p').textContent) {
-        laneHead.querySelector('p').style.display = ''
-        input.remove()
-        laneHead.classList.remove('editing')
-    } else {
-        const response = await patchLaneReq(
-            document.getElementById('board').getAttribute('data-db-id'),
-            {
-                laneId: laneHead.closest('.lane').getAttribute('data-db-id'),
-                laneName: newLaneName,
-            }
-        )
-
-        if (response.ok) {
-            laneHead.querySelector('p').textContent = newLaneName
+    if (newLaneName.trim() !== '') {
+        if (newLaneName === laneHead.querySelector('p').textContent) {
             laneHead.querySelector('p').style.display = ''
             input.remove()
             laneHead.classList.remove('editing')
         } else {
-            console.error('Serverside issue updating lane name.')
+            const response = await patchLaneReq(
+                document.getElementById('board').getAttribute('data-db-id'),
+                {
+                    laneId: laneHead
+                        .closest('.lane')
+                        .getAttribute('data-db-id'),
+                    laneName: newLaneName,
+                }
+            )
+
+            if (response.ok) {
+                laneHead.querySelector('p').textContent = newLaneName
+                laneHead.querySelector('p').style.display = ''
+                input.remove()
+                laneHead.classList.remove('editing')
+            } else {
+                console.error('Serverside issue updating lane name.')
+            }
         }
+    } else {
+        alert('Please add a name to create a new lane.')
     }
 }
 
