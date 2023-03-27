@@ -1,19 +1,9 @@
 'use strict'
 
-// async function postBoard(data) {
-//     const response = await fetch('http://localhost:5000/boards', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'text/plain',
-//         },
-//         body: JSON.stringify(data),
-//     })
-
-//     return response
-// }
+const APIUrl = 'http://localhost:5000'
 
 async function patchBoardReq(boardId, boardData) {
-    const response = await fetch(`http://localhost:5000/boards/${boardId}`, {
+    const response = await fetch(`${APIUrl}/boards/${boardId}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -25,23 +15,20 @@ async function patchBoardReq(boardId, boardData) {
 }
 
 async function postLaneReq(boardId, laneData) {
-    const response = await fetch(
-        `http://localhost:5000/boards/${boardId}/lanes`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(laneData),
-        }
-    )
+    const response = await fetch(`${APIUrl}/boards/${boardId}/lanes`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(laneData),
+    })
 
     return response
 }
 
 async function patchLaneReq(boardId, laneData) {
     const response = await fetch(
-        `http://localhost:5000/boards/${boardId}/lanes/${laneData.laneId}`,
+        `${APIUrl}/boards/${boardId}/lanes/${laneData.laneId}`,
         {
             method: 'PATCH',
             headers: {
@@ -56,7 +43,7 @@ async function patchLaneReq(boardId, laneData) {
 
 async function deleteAndTransferReq(boardId, laneId, destinationLaneId) {
     const response = await fetch(
-        `http://localhost:5000/boards/${boardId}/lanes/${laneId}/delete-and-transfer/${destinationLaneId}`,
+        `${APIUrl}/boards/${boardId}/lanes/${laneId}/delete-and-transfer/${destinationLaneId}`,
         {
             method: 'PATCH',
         }
@@ -67,7 +54,7 @@ async function deleteAndTransferReq(boardId, laneId, destinationLaneId) {
 
 async function deleteLaneReq(boardId, laneId) {
     const response = await fetch(
-        `http://localhost:5000/boards/${boardId}/lanes/${laneId}`,
+        `${APIUrl}/boards/${boardId}/lanes/${laneId}`,
         {
             method: 'DELETE',
         }
@@ -78,7 +65,7 @@ async function deleteLaneReq(boardId, laneId) {
 
 async function postCardReq(boardId, laneId, cardData) {
     const response = await fetch(
-        `http://localhost:5000/boards/${boardId}/lanes/${laneId}/cards`,
+        `${APIUrl}/boards/${boardId}/lanes/${laneId}/cards`,
         {
             method: 'POST',
             headers: {
@@ -93,7 +80,7 @@ async function postCardReq(boardId, laneId, cardData) {
 
 async function patchCardReq(boardId, laneId, cardData) {
     const response = await fetch(
-        `http://localhost:5000/boards/${boardId}/lanes/${laneId}/cards/${cardData.cardId}`,
+        `${APIUrl}/boards/${boardId}/lanes/${laneId}/cards/${cardData.cardId}`,
         {
             method: 'PATCH',
             headers: {
@@ -113,7 +100,7 @@ async function patchCardLocationReq(
     destinationLaneId
 ) {
     const response = await fetch(
-        `http://localhost:5000/boards/${boardId}/lanes/${laneId}/cards/${cardId}/move-to-lane/${destinationLaneId}`,
+        `${APIUrl}/boards/${boardId}/lanes/${laneId}/cards/${cardId}/move-to-lane/${destinationLaneId}`,
         {
             method: 'PATCH',
         }
@@ -124,7 +111,7 @@ async function patchCardLocationReq(
 
 async function deleteCardReq(boardId, laneId, cardId) {
     const response = await fetch(
-        `http://localhost:5000/boards/${boardId}/lanes/${laneId}/cards/${cardId}`,
+        `${APIUrl}/boards/${boardId}/lanes/${laneId}/cards/${cardId}`,
         {
             method: 'DELETE',
         }

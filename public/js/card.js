@@ -221,10 +221,6 @@ function startEditingCard(btn) {
     nameInput.focus()
 }
 
-// Applying new text (editing lanes/cards) allows fully empty ones
-// which isn't allowed on creation. Need to add logic to check if
-// there's still a value to head els when creating logic to post
-// to server.
 async function applyCardEdit(inputs, cardDivs) {
     if (inputs[0].value.trim() !== '') {
         let changed = false

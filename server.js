@@ -16,7 +16,6 @@ app.set('view engine', 'pug')
 app.get('/', async (req, res) => {
     let url
     if (req.cookies.lastBoard) {
-        // fetch boards/:id
         console.log('Fetching board from cookie.')
         url = `http://localhost:5000/boards/${req.cookies.lastBoard}`
 
@@ -28,7 +27,7 @@ app.get('/', async (req, res) => {
         ])
 
         if (response.status === 404) {
-            console.log('Cookie board not found in db - loading default.')
+            console.log('Cookied board not found in db - loading default.')
             loadDefault(res)
         } else {
             loadBoardPage(res, await response.json())

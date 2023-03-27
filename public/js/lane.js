@@ -6,7 +6,6 @@ function addLaneButtonListeners(event) {
         case 'left':
         case 'right':
             if (isEditing(lane.querySelector('.lane-head'))) {
-                // Should add prompt to save/reset.
                 cancelLaneEdit(lane.querySelector('.lane-head'))
             }
             moveLane(event.target)
@@ -21,7 +20,6 @@ function addLaneButtonListeners(event) {
             break
         case 'delete':
             if (isEditing(lane.querySelector('.lane-head'))) {
-                // Should add prompt to save/reset.
                 cancelLaneEdit(lane.querySelector('.lane-head'))
             }
             removeLane(event.target)
