@@ -54,6 +54,17 @@ async function patchLaneReq(boardId, laneData) {
     return response
 }
 
+async function deleteAndTransferReq(boardId, laneId, destinationLaneId) {
+    const response = await fetch(
+        `http://localhost:5000/boards/${boardId}/lanes/${laneId}/delete-and-transfer/${destinationLaneId}`,
+        {
+            method: 'PATCH',
+        }
+    )
+
+    return response
+}
+
 async function deleteLaneReq(boardId, laneId) {
     const response = await fetch(
         `http://localhost:5000/boards/${boardId}/lanes/${laneId}`,

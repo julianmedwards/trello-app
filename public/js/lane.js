@@ -175,15 +175,15 @@ function cancelLaneEdit(wrapper) {
 }
 
 async function removeLane(btn) {
-    let msg = 'Are you sure you want to delete this swim lane?'
-    if (confirm(msg)) {
+    let deleteMsg = 'Are you sure you want to delete this swim lane?'
+    if (confirm(deleteMsg)) {
         let currLane = btn.closest('.lane')
         let cards = currLane.querySelector('.card-container').children
         let lanes = document.getElementById('board').querySelectorAll('.lane')
         if (cards.length > 0 && lanes.length > 1) {
-            let msg2 =
+            let transferMsg =
                 'Would you like to move your cards to another lane before deleting?'
-            if (confirm(msg2)) {
+            if (confirm(transferMsg)) {
                 let selectLane = prompt(
                     "Enter a number for the lane you'd like to move the cards to. (left-to-right)"
                 )
@@ -193,12 +193,25 @@ async function removeLane(btn) {
                             "Please select a lane other than the one you're deleting."
                         )
                     } else {
-                        for (let i = 0; cards[i] != null; ) {
-                            lanes[selectLane - 1]
-                                .querySelector('.card-container')
-                                .append(cards[i])
+                        const response = await deleteAndTransferReq(
+                            document
+                                .getElementById('board')
+                                .getAttribute('data-db-id'),
+                            currLane.getAttribute('data-db-id'),
+                            lanes[selectLane - 1].getAttribute('data-db-id')
+                        )
+
+                        if (response.status === 204) {
+                            for (let i = 0; cards[i] != null; ) {
+                                lanes[selectLane - 1]
+                                    .querySelector('.card-container')
+                                    .append(cards[i])
+                            }
+                            currLane.remove()
+                        } else {
+                            console.error('Serverside issue deleting lane.')
+                            alert('Failed to delete lane!')
                         }
-                        currLane.remove()
                     }
                 } else {
                     alert(
