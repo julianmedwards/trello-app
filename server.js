@@ -14,7 +14,6 @@ app.set('views', './views')
 app.set('view engine', 'pug')
 
 app.get('/', async (req, res) => {
-    // Need to catch cookie board deleted.
     let url
     if (req.cookies.lastBoard) {
         // fetch boards/:id

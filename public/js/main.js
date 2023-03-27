@@ -55,20 +55,6 @@ function advanceCursor(currInput, form) {
     formEls[currIndex + 1].focus()
 }
 
-// ---- Move to respective files when fixed. ----
-// Applying new text (editing lanes/cards) allows fully empty ones
-// which isn't allowed on creation. Need to add logic to check if
-// there's still a value to head els when creating logic to post
-// to server.
-function applyCardEdit(inputs, cardDivs) {
-    for (let i = 0; i < inputs.length; i++) {
-        cardDivs[i].querySelector('p').textContent = inputs[i].value
-        cardDivs[i].style.display = ''
-        cardDivs[i].classList.remove('editing')
-    }
-    inputs[0].parentElement.remove()
-}
-
 function toggleVisiblity(element) {
     if (
         element.classList.contains('hidden') ||

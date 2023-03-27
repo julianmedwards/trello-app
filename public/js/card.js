@@ -79,13 +79,24 @@ async function addCard(descrInput) {
     }
 }
 
-function moveCard(btn) {
+async function moveCard(btn) {
     let card = btn.closest('.card')
     switch (btn.getAttribute('name')) {
         case 'up':
             let prevCard = card.previousElementSibling
             if (prevCard) {
-                prevCard.before(card)
+                const sequenceShift = -1
+                const response = await patchCardReq(
+                    document.getElementById('board').getAttribute('data-db-id'),
+                    card.closest('.lane').getAttribute('data-db-id'),
+                    {cardId: card.getAttribute('data-db-id'), sequenceShift}
+                )
+
+                if (response.ok) {
+                    prevCard.before(card)
+                } else {
+                    console.error('Serverside issue moving lane.')
+                }
             } else {
                 console.log('Card already at top.')
             }
@@ -93,7 +104,18 @@ function moveCard(btn) {
         case 'down':
             let nextCard = card.nextElementSibling
             if (nextCard) {
-                nextCard.after(card)
+                const sequenceShift = 1
+                const response = await patchCardReq(
+                    document.getElementById('board').getAttribute('data-db-id'),
+                    card.closest('.lane').getAttribute('data-db-id'),
+                    {cardId: card.getAttribute('data-db-id'), sequenceShift}
+                )
+
+                if (response.ok) {
+                    nextCard.after(card)
+                } else {
+                    console.error('Serverside issue moving lane.')
+                }
             } else {
                 console.log('Card already at bottom.')
             }
@@ -153,6 +175,43 @@ function startEditingCard(btn) {
     })
     headDiv.before(editForm)
     nameInput.focus()
+}
+
+// Applying new text (editing lanes/cards) allows fully empty ones
+// which isn't allowed on creation. Need to add logic to check if
+// there's still a value to head els when creating logic to post
+// to server.
+async function applyCardEdit(inputs, cardDivs) {
+    let changed = false
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value !== cardDivs[i].querySelector('p').textContent) {
+            changed = true
+            break
+        }
+    }
+
+    if (changed) {
+        const response = await patchCardReq(
+            document.getElementById('board').getAttribute('data-db-id'),
+            cardDivs[0].closest('.lane').getAttribute('data-db-id'),
+            {
+                cardId: cardDivs[0].closest('.card').getAttribute('data-db-id'),
+                cardName: inputs[0].value,
+                cardDescr: inputs[1].value,
+            }
+        )
+
+        if (response.ok) {
+            for (let i = 0; i < inputs.length; i++) {
+                cardDivs[i].querySelector('p').textContent = inputs[i].value
+                cardDivs[i].style.display = ''
+                cardDivs[i].classList.remove('editing')
+            }
+            inputs[0].parentElement.remove()
+        }
+    } else {
+        cancelCardEdit(cardDivs[0].closest('.card'))
+    }
 }
 
 function cancelCardEdit(wrapper) {
