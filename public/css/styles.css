@@ -26,8 +26,7 @@ main {
 
 input {
     border: none;
-    margin: 0px;
-    padding: 3px 6px;
+    margin-bottom: 3px;
 }
 
 #board {
@@ -76,15 +75,19 @@ input {
     white-space: nowrap;
 }
 
+#board > .add-new input {
+    margin: 1rem;
+}
+
 .add-new > form {
     display: inline-block;
     border: none;
     transition: all 0.2s;
+    vertical-align: top;
 }
 
 .add-new input {
     transition: all 0.2s;
-    margin: 1rem;
     font-size: 13px;
 }
 
@@ -101,8 +104,11 @@ input {
     display: block;
 }
 
-.lane input {
-    margin: 0 0.35rem 0.35rem 0.35rem;
+.lane-head input {
+    padding: 0.25rem 0.5rem 0.25rem;
+    margin: 0rem 0.5rem 0.25rem;
+    background-color: #e0e0e0;
+    font-weight: 500;
 }
 
 .lane .add-new > i {
@@ -142,6 +148,10 @@ input {
     margin: 0.35rem 0.5rem;
 }
 
+.lane > .add-new input {
+    margin: 0 0.35rem 0.35rem 0.35rem;
+}
+
 .card {
     background-color: #ffffff;
     margin: 0 0.5rem 0.35rem 0.5rem;
@@ -162,10 +172,16 @@ input {
     padding: 0.25rem 1rem 0.5rem 1.5rem;
 }
 
-.card-head > input,
-.card-body > input {
-    border: 1px solid #0000004d;
-    border-radius: 4px;
+.card input {
+    padding: 0.25rem 0rem 0.25rem 0.75rem;
+    margin-left: 0.25rem;
+    border-bottom: 1px solid #0000004d;
+}
+
+.card form input:last-child {
+    font-size: 14px;
+    padding: 0.25rem 0.75rem 0.5rem 0.75rem;
+    margin-left: 0.5rem;
 }
 
 footer {
