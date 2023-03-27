@@ -95,7 +95,7 @@ async function moveCard(btn) {
                 if (response.ok) {
                     prevCard.before(card)
                 } else {
-                    console.error('Serverside issue moving lane.')
+                    console.error('Serverside issue moving card.')
                 }
             } else {
                 console.log('Card already at top.')
@@ -114,7 +114,7 @@ async function moveCard(btn) {
                 if (response.ok) {
                     nextCard.after(card)
                 } else {
-                    console.error('Serverside issue moving lane.')
+                    console.error('Serverside issue moving card.')
                 }
             } else {
                 console.log('Card already at bottom.')
@@ -123,8 +123,20 @@ async function moveCard(btn) {
         case 'left':
             let prevLane = card.closest('.lane').previousElementSibling
             if (prevLane && prevLane.classList.contains('lane')) {
-                let prevLaneCards = prevLane.querySelector('.card-container')
-                prevLaneCards.append(card)
+                const response = await patchCardLocationReq(
+                    document.getElementById('board').getAttribute('data-db-id'),
+                    card.closest('.lane').getAttribute('data-db-id'),
+                    card.getAttribute('data-db-id'),
+                    prevLane.getAttribute('data-db-id')
+                )
+
+                if (response.ok) {
+                    let prevLaneCards =
+                        prevLane.querySelector('.card-container')
+                    prevLaneCards.append(card)
+                } else {
+                    console.error('Serverside issue moving card to lane.')
+                }
             } else {
                 console.log('No lane on the left to move card to.')
             }
@@ -132,8 +144,20 @@ async function moveCard(btn) {
         case 'right':
             let nextLane = card.closest('.lane').nextElementSibling
             if (nextLane && nextLane.classList.contains('lane')) {
-                let nextLaneCards = nextLane.querySelector('.card-container')
-                nextLaneCards.append(card)
+                const response = await patchCardLocationReq(
+                    document.getElementById('board').getAttribute('data-db-id'),
+                    card.closest('.lane').getAttribute('data-db-id'),
+                    card.getAttribute('data-db-id'),
+                    nextLane.getAttribute('data-db-id')
+                )
+
+                if (response.ok) {
+                    let nextLaneCards =
+                        nextLane.querySelector('.card-container')
+                    nextLaneCards.append(card)
+                } else {
+                    console.error('Serverside issue moving card to lane.')
+                }
             } else {
                 console.log('No lane on the right to move card to.')
             }

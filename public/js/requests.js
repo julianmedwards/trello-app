@@ -95,6 +95,22 @@ async function patchCardReq(boardId, laneId, cardData) {
     return response
 }
 
+async function patchCardLocationReq(
+    boardId,
+    laneId,
+    cardId,
+    destinationLaneId
+) {
+    const response = await fetch(
+        `http://localhost:5000/boards/${boardId}/lanes/${laneId}/cards/${cardId}/move-to-lane/${destinationLaneId}`,
+        {
+            method: 'PATCH',
+        }
+    )
+
+    return response
+}
+
 async function deleteCardReq(boardId, laneId, cardId) {
     const response = await fetch(
         `http://localhost:5000/boards/${boardId}/lanes/${laneId}/cards/${cardId}`,
