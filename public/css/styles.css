@@ -72,6 +72,10 @@ input {
     align-self: start;
 }
 
+#board > .add-new {
+    white-space: nowrap;
+}
+
 .add-new > form {
     display: inline-block;
     border: none;
