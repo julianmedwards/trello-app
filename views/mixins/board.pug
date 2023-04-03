@@ -1,5 +1,5 @@
 mixin board(data)
-  #board(data-db-id=data._id)
+  #board(data-db-id=data.id)
     if data.lanes.length > 0
       each lane in data.lanes
         include lane
